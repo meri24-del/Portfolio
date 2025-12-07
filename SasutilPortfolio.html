@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* THEME VARIABLES */
+    :root {
+      --bg-color: #0d1117;
+      --text-color: #c9d1d9;
+      --sidebar-bg: #161b22;
+      --border-color: #30363d;
+      --accent-color: #58a6ff;
+      --muted-text: #8b949e;
+    }
+
+    body.light {
+      --bg-color: #f5f5f5;
+      --text-color: #222;
+      --sidebar-bg: #ffffff;
+      --border-color: #ddd;
+      --accent-color: #007acc;
+      --muted-text: #555;
+    }
+
+    body.dark {
+      --bg-color: #0d1117;
+      --text-color: #c9d1d9;
+      --sidebar-bg: #161b22;
+      --border-color: #30363d;
+      --accent-color: #58a6ff;
+      --muted-text: #8b949e;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+      position: relative;
+    }
+
+    /* TOGGLE SWITCH */
+    .toggle-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 25px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 25px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 19px;
+      width: 19px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 300px;
+      background: var(--sidebar-bg);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-right: 1px solid var(--border-color);
+      transition: background 0.3s;
+    }
+
+      .sidebar a {
+        color: var(--accent-color);
+        text-decoration: underline;
+        font-weight: 500;
+      }
+
+      .sidebar a:hover {
+        color: #1f6feb;
+      }
+
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    .name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .role {
+      font-size: 1rem;
+      color: var(--muted-text);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .socials a {
+      margin: 0 8px;
+      color: var(--accent-color);
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    /* BIO */
+    .bio {
+      text-align: center;
+      margin: 1rem 0;
+      color: var(--text-color);
+      font-size: 1rem;
+    }
+
+    /* CONTACT DETAILS */
+    .contact-info {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+
+    .contact-item {
+      margin-bottom: 0.8rem;
+    }
+
+    /* LANGUAGES SECTION */
+    .languages, .tech-stack, .soft-skills {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+
+    .languages h3, .tech-stack h3, .soft-skills h3 {
+      color: var(--accent-color);
+      border-bottom: 1px solid #1e1e1e;
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+    }
+
+    .languages p,.tech-stack p, .soft-skills p {
+      margin-bottom: 8px;
+    }
+
+
+    /* DOWNLOAD RESUME */
+    .portfolio-download {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: auto;
+    }
+    
+    .portfolio-download button {
+      margin-top: 110px;
+      background: #fff;
+      color: #2196f3;
+      border: 2px solid #2196f3;
+      padding: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .portfolio-download button:hover {
+      background: #2196f3;
+      color: #fff;
+    }
+
+    body.dark .portfolio-download button {
+      background: #1e1e1e;
+      color: var(--accent-color);
+      border: 2px solid var(--accent-color);
+    }
+
+    body.dark .portfolio-download button:hover {
+      background: var(--accent-color);
+      color: #fff;
+    }
+
+    /* MAIN CONTENT */
+    .main {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    section {
+      margin-bottom: 2.5rem;
+    }
+
+    h2 {
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--sidebar-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      transition: background 0.3s;
+    }
+
+    .stat-card a {
+      color: var(--accent-color);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    .stat-card a:hover {
+      color: #1f6feb;
+    }
+
+    .stat-card h3 {
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card p {
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+
+    /* SKILLS */
+    .skill {
+      margin-bottom: 1rem;
+    }
+
+    .skill-name {
+      margin-bottom: 0.3rem;
+    }
+
+    .progress-bar {
+      background: var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 10px;
+      background: var(--accent-color);
+      border-radius: 10px;
+    }
+
+    /* TIMELINE */
+    .timeline {
+      border-left: 2px solid var(--accent-color);
+      padding-left: 1rem;
+    }
+
+    .timeline-item {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      position: absolute;
+      left: -20px;
+      top: 5px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+      }
+    }
+  </style>
+</head>
+<body class="light">
+
+  <!-- TOGGLE SWITCH -->
+  <div class="toggle-container">
+    <label class="switch">
+      <input type="checkbox" id="ON-OFF" onclick="toggleTheme()">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <img src="enhanced.jpg" alt="Profile" class="profile-pic">
+    <div class="name">Mary Angel Kate A. Sasutil</div>
+    <div class="role">Aspiring Software Engineer</div>
+    <div class="socials">
+      <a href="#">🌐</a>
+      <a href="#">💼</a>
+      <a href="#">📧</a>
+    </div>
+
+    <p class="bio">Building through coding.</p>
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <p class="contact-item">📍 Cebu, Philippines</p>
+      <p class="contact-item">📞 +639058537916</p>
+      <p class="contact-item">✉️ <a href="mailto:maryangelsasutil@gmail.com">maryangelsasutil@gmail.com</a></p>
+      <p class="contact-item">💻 <a href="https://github.com/meri24-del" target="_blank">meri24-del's GitHub</a></p>
+    </div>
+
+    <!-- Languages -->
+    <div class="languages">
+      <h3>LANGUAGES</h3>
+      <p>🇵🇭 Cebuano</p>
+      <p>🇵🇭 Tagalog</p>
+      <p>🇺🇸 English</p>
+      <p>🇯🇵 Japanese (learning)</p>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="tech-stack">
+      <h3>TECH STACK</h3>
+      <p>🔧 Java</p>
+      <p>🌐 HTML & CSS</p>
+      <p>🐍 Python</p>
+      <p>🖥 C</p>
+    </div>
+
+    <!-- Soft Skills-->
+    <div class="soft-skills">
+      <h3>SOFT SKILLS</h3>
+      <p>💬 Communication</p>
+      <p>⏱ Time Management</p>
+      <p>🧠 Problem Solving</p>
+      <p>⚡ Adaptability</p>
+      <p>💡 Critical Thinking</p>
+      <p>🤝 Collaboration</p>
+    </div>
+
+
+    <!-- Download Portfolio -->
+    <div class="portfolio-download">
+      <a href="SasutilMAKportfolio.pdf" download>
+        <button>📥 Download Portfolio</button>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <section>
+      <h2>About Me</h2>
+      <p>I’m a BSIT student passionate about coding and problem-solving. I enjoy learning new technologies and building small projects that improve my skills. My goal is to become a professional software engineer and contribute to impactful projects.</p>
+    </section>
+
+    <section>
+      <h2>Statistics</h2>
+      <div class="stats">
+        <div class="stat-card">
+          <h3>5+</h3>
+          <p>Mini Projects</p>
+        </div>
+        <div class="stat-card">
+          <h3>100%</h3>
+          <p>Learning</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h4>2025 - Present</h4>
+          <p>Bachelor of Science in Information Technology – Cebu Technological University</p>
+          <br>
+          <h4>2024 - Graduated Senior High School</h4>
+          <p>Science,Technology, Engineering, & Mathematics – Sangat National High School</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <div class="skill">
+        <div class="skill-name">Java</div>
+        <div class="progress-bar"><div class="progress" style="width: 70%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-name">HTML & CSS</div>
+        <div class="progress-bar"><div class="progress" style="width: 60%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-name">Python</div>
+        <div class="progress-bar"><div class="progress" style="width: 50%"></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-name">C</div>
+        <div class="progress-bar"><div class="progress" style="width: 80%"></div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <div class="stats">
+        <div class="stat-card">
+          <h3>Basic Calculator (Java)</h3>
+          <p>A simple Java program that performs addition, subtraction, multiplication, and division.</p>
+          <a href="https://github.com/meri24-del/Java-Basic-Calculator" target="_blank">🔗 View on GitHub</a>
+        </div>
+
+        <div class="stat-card">
+          <h3>Simple Bank System</h3>
+          <p>A C program that simulates basic banking operations such as deposit, withdrawal, and account history.</p>
+          <a href="https://github.com/meri24-del/BankSystem-C" target="_blank">🔗 View on GitHub</a>
+        </div>
+
+        <div class="stat-card">
+          <h3>Coming Soon</h3>
+          <p>Some projects are not yet uploaded! More projects will be added here as I continue learning and building.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Experience & Learning</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h4>2025 - Basic Calculator Project</h4>
+          <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Simple Bank System</h4>
+          <p>Developed a simple Java calculator to practice object-oriented programming.</p>
+          <p>Created a C banking system to strengthen understanding of programming concepts and system logic.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>2024 - HTML & CSS Learning</h4>
+          <p>Built my first static website and portfolio.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>2023 - Programming Fundamentals</h4>
+          <p>Started my journey in BSIT, exploring logic, C, Java, and Python basics.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(savedTheme);
+    document.getElementById("ON-OFF").checked = savedTheme === "dark";
+  });
+
+  function toggleTheme() {
+    const body = document.body;
+    const toggle = document.getElementById("ON-OFF");
+
+    if (toggle.checked) {
+      body.classList.remove("light");
+      body.classList.add("dark");
+      localStorage.setItem("theme", "dark"); // save preference
+    } else {
+      body.classList.remove("dark");
+      body.classList.add("light");
+      localStorage.setItem("theme", "light"); // save preference
+    }
+  }
+    </script>
+  </body>
+</html>
